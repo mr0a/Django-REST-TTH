@@ -22,3 +22,27 @@ REST_FRAMEWORK = {
 
 ### Adding url
 - Add url route in urls.py `path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+### Model Serializers
+- Convert model output to json with builtin functions.
+- Create a file named `serializers.py` in the project or app you want to create json data.
+```python3
+from rest_framework import serializers
+from . import models
+
+class CourseSerializer(serializers.ModelSerializer):
+  class Meta:
+      model = models.Model_name
+      fields = ['id', 'field1']
+ ```
+ - Use the created class in django shell to test the serializer.
+ ```python3
+ from rest_framework.renderers import JSONRenderer # for rendering as json byte string
+ from app.models import Model_name
+ from app.serializers import CourseSerializer
+ 
+ course = Course.objects.latest('id')
+ serializer = CourseSerializer(course) #serializer.data shows json
+ JSONRenderer().render(serializer.data) #returns json byte string
+ ```
+ 
