@@ -70,3 +70,26 @@ def post(self, request, format=None):
   serializer.save() # Save the data in the database and also updates the serializer
   return Response(serializer.data, status=status.HTTP_201_CREATED)
 ```
+
+### Generic CRUD
+- Using `generics` from `rest_framework` to create generic api views
+```python3
+from rest_framework import generics
+from .models import Course
+from . import serializers
+
+class ListCreateView(generics.ListCreateAPIView): # Try changing to ListAPIView
+  queryset = Course.objects.all()
+  serializer_class = serializers.CourseSerializer # Specifying the serializer to use
+```
+- The ListCreateAPIView creates a view of the queryset with option to create new records.
+- Using `RetrieveUpdateDestroy` from generics to create a view where we can retrieve single, update or delete a record.
+```python3
+class RetrieveUpdateDestroyCourse(generics.RetrieveUpdateDestroyAPIView): # You can also try with RetrieveAPIView, etc.
+    queryset = Course.objects.all() # Queryset from where a record is retrieved by pk from the request url
+    serializer_class = serializers.CourseSerializer
+```
+- We can also use these generic views directly from `urls.py`
+```python3
+path('api/<int:course_pk>/step/', ListCreateAPIView.as_view(queryset=Step.objects.all(), serializer_class = StepSerializer))
+```
