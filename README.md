@@ -82,14 +82,20 @@ class ListCreateView(generics.ListCreateAPIView): # Try changing to ListAPIView
   queryset = Course.objects.all()
   serializer_class = serializers.CourseSerializer # Specifying the serializer to use
 ```
+- We can also use these generic views directly from `urls.py`(dont' forget to import the serializers, models and generic view).
+```python3
+path('api/<int:course_pk>/step/', ListCreateAPIView.as_view(queryset=Step.objects.all(), serializer_class = StepSerializer))
+```
 - The ListCreateAPIView creates a view of the queryset with option to create new records.
+- `perform_create` method to validate or enforce some things during creation of new record with post request to the api.
 - Using `RetrieveUpdateDestroy` from generics to create a view where we can retrieve single, update or delete a record.
 ```python3
 class RetrieveUpdateDestroyCourse(generics.RetrieveUpdateDestroyAPIView): # You can also try with RetrieveAPIView, etc.
     queryset = Course.objects.all() # Queryset from where a record is retrieved by pk from the request url
     serializer_class = serializers.CourseSerializer
 ```
-- We can also use these generic views directly from `urls.py`
+- To change the queryset i.e. the list of records accessible through the API create get_queryset method in the view.
 ```python3
-path('api/<int:course_pk>/step/', ListCreateAPIView.as_view(queryset=Step.objects.all(), serializer_class = StepSerializer))
+def get_queryset(self):
+  return self.queryset.filter(course_id=self.kwargs.get('course_pk')) # This filters the queryset
 ```
