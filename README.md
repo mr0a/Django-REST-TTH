@@ -87,6 +87,8 @@ class ListCreateView(generics.ListCreateAPIView): # Try changing to ListAPIView
 path('api/<int:course_pk>/step/', ListCreateAPIView.as_view(queryset=Step.objects.all(), serializer_class = StepSerializer))
 ```
 - The ListCreateAPIView creates a view of the queryset with option to create new records.
+
+### Overiding generic view methods
 - `perform_create` method to validate or enforce some things during creation of new record with post request to the api.
 - Using `RetrieveUpdateDestroy` from generics to create a view where we can retrieve single, update or delete a record.
 ```python3
@@ -99,3 +101,5 @@ class RetrieveUpdateDestroyCourse(generics.RetrieveUpdateDestroyAPIView): # You 
 def get_queryset(self):
   return self.queryset.filter(course_id=self.kwargs.get('course_pk')) # This filters the queryset
 ```
+
+### Viewsets and Routers
